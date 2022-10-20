@@ -1,8 +1,16 @@
 <?php
 
-$mysql = new mysqli('127.0.0.1', 'root', '', 'accountmaganer');
+$mysql = new mysqli('127.0.0.1', 'root', '', 'control_tiempo');
 
-$insert = "INSERT INTO cuentas (ID_TIPO_CUENTA,CORREO,CONTRASENIA) VALUES (".$_POST['tipoCuentaNuevaCuenta'].",'".$_POST['correoCuenta']."','".$_POST['contraseniaCuenta']."')";
+$insert = " INSERT INTO intervals (
+                TASK_ID,
+                TIME_START,
+                TIME_END
+            ) VALUES (
+            ".$_POST['id'].",
+            '".$_POST['timeStart']."',
+            '".$_POST['timeEnd']."'
+            )";
 
 if ( $mysql -> query ( $insert ) === TRUE ) {
 
