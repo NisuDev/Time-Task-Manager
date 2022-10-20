@@ -1,10 +1,10 @@
 <?php
 
-$mysql = new mysqli('127.0.0.1', 'root', '', 'accountmaganer');
+$mysql = new mysqli('127.0.0.1', 'root', '', 'control_tiempo');
 
 
 
-$insert = "INSERT INTO tipo_cuenta (NOMBRE_TIPO_CUENTA) VALUES ('".$_POST['nombreTipoCuenta']."')";
+$insert = "INSERT INTO task (NOMBRE_TIPO_CUENTA) VALUES ('".$_POST['tipo']."')";
 
 if ( $mysql -> query ( $insert ) === TRUE ) {
 
