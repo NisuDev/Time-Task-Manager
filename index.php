@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Accounts manager</title>
+    <title>Task manager</title>
     <link rel="icon" type="image/jpg" href="https://cdn-icons-png.flaticon.com/512/1055/1055645.png"/>
      <!-- JQuery -->
     <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.17/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
@@ -19,6 +19,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
     <style>
         i{
             cursor:pointer;
@@ -44,15 +46,20 @@
         
         }
 
-        function newTask(type){
-
+        function newTask( type , newDay ){
             var tipo = type;
+
+            data = $("#dateInput").val()
         
             var params = {
         
-                "tipo" : tipo
+                "tipo" : tipo,
+                "data" : data,
+                "tipoIngreso" : newDay
 
             };
+
+            
         
             $.ajax({
                 data:  params,
@@ -77,8 +84,6 @@
            
             var desc = $.trim($('#text-area-'+id).val());
 
-            
-        
             var params = {
         
                 "id" : id,
@@ -120,7 +125,9 @@
                     url:   'src/getTasks.php',
                     type:  'post',
                     success:  function (response) {
+
                         $('#card-display').html(response);
+                        getTime()
                     }
                 });
                 
@@ -131,7 +138,35 @@
             }
         }
 
-        
+        function getTime(){
+
+            if ($("#dateInput").val() != '') {
+
+                localStorage.setItem('date', $('#dateInput').val());
+
+                var params = {
+                
+                    "date" : $("#dateInput").val()
+                
+                };
+                
+                $.ajax({
+                    data:  params,
+                    url:   'src/getTime.php',
+                    type:  'post',
+                    success:  function (response) {
+
+                        $('#time-display').html(response);
+                       
+                    }
+                });
+                
+            }else{
+
+                alert('Ingrese una fecha')
+
+            }
+        }
         
         function deleteInterval(id){
         
@@ -155,11 +190,50 @@
             });
         
         }
+        
+        
+        function deleteTask(id){
+
+            $.confirm({
+                title: 'Tas seguro?',
+                content: 'Tas seguro??????',
+                buttons: {
+                    confirm: function () {
+                        var params = {
+        
+                        "id" : id
+
+                        };
+
+                        $.ajax({
+                            data:  params,
+                            url:   'src/deleteTask.php',
+                            type:  'post',
+                            success:  function (response) {
+                                if ( response == 'OK') {
+                                    location.reload();
+                                } else {
+                                alert(response);
+                                }
+                            }
+                        });
+                    },
+                    cancel: function () {
+                        $.alert('tabn');
+                    }
+                }
+            });
+        
+            
+        
+        }
+        
+
         function addInterval(id){
 
             ////VALIDAR HORAS
 
-            if ( parseInt( $( '#hstart-'+id ).val() ) < 0 || parseInt( $( '#hend-'+id ).val() ) < 0 ) {
+            if ( parseInt( $( '#hstart-'+id ).val() ) <= 0 || parseInt( $( '#hend-'+id ).val() ) <= 0 ) {
                 alert('Debe ingresar una hora mayor o igual a 0');
                 return 0;
             }
@@ -218,9 +292,9 @@
             });
         
         }
-        
-        window.onload = function() {
 
+        window.onload = function() {
+            $("body").animate({ scrollTop: $(document).height()}, 1000);    
             var date = localStorage.getItem('date');
 
             if (date !== null) {
@@ -247,6 +321,11 @@
                 <button type="button" onClick="getDate()" id="start" class="btn btn-outline-success"> START </button> 
             </div>
         </div>
+        <div class="pt-5 d-flex justify-content-center">
+            <div id="time-display">
+        </div>
+        <input type="hidden" id="scroll" runat="server" />
+
         <div class="pt-5 d-flex justify-content-center w-100">
             <div id="card-display">
         </div>

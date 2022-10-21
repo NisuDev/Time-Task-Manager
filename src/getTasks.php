@@ -2,6 +2,45 @@
 
 $mysql = new mysqli('127.0.0.1', 'root', '', 'control_tiempo');
 
+function GetIntervalSum($idTask){
+
+    $mysql = new mysqli('127.0.0.1', 'root', '', 'control_tiempo');
+    
+    $selectInterval = " SELECT 
+                            `intervals`.`ID`, 
+                            `intervals`.`TIME_START`, 
+                            `intervals`.`TIME_END`,
+                            SUM(
+                                TIMESTAMPDIFF(
+                                    minute,
+                                    `intervals`.`TIME_START`,
+                                    `intervals`.`TIME_END`
+                                )
+                            )  as 'DIFF' 
+                FROM 
+                    `intervals`
+                WHERE
+                    `intervals`.`TASK_ID` = ".$idTask." ";
+
+    $result = $mysql -> query( $selectInterval );
+
+    $arrInterval = array();
+
+    while( $row = $result -> fetch_assoc () ) {
+
+        $dato = $row['DIFF'];
+
+    }
+
+    if( ! $dato ){
+
+        return NULL;
+    
+    }
+
+    return $dato;
+    
+}
 function GetInterval($idTask){
 
     $mysql = new mysqli('127.0.0.1', 'root', '', 'control_tiempo');
@@ -19,7 +58,6 @@ function GetInterval($idTask){
                     `intervals`
                 WHERE
                     `intervals`.`TASK_ID` = ".$idTask." ";
-
 
     $result = $mysql -> query( $selectInterval );
 
@@ -72,30 +110,50 @@ while( $row = $result -> fetch_assoc () ) {
     $arrCard[$row['ID']]['ID'] = $row['ID'];
 
 }
+/* 
+echo '<pre>';
+var_dump($arrCard);
+echo '</pre>'; */
+$msg = '';
 
 if ( $arrCard ) {
 
     foreach ($arrCard as $key => $value) {
 
-       $msg = ' 
+       $msg .= ' 
             <div class="d-flex flex-row">
-                <div class="card" style="width: 50% !important;">
+
+                <div class="card my-2" style="';
+
+                if($value['TYPE'] == 'SOPORTE'){
+                    $msg .= ' background-color:rgba(241,139,255,0.31222918855042014); ';
+                }else{
+                    $msg .= ' background-color:rgba(177,255,139,0.31222918855042014); ';
+                }
+                
+                $msg .= '  width: 50% !important;">
+
                     <div class="p-2" onClick="modifyCard(`'.$value['ID'].'`)">
                         <i class="fa-solid fa-pencil"></i>
                     </div>
                     <div class="card-body" data-id="'.$value['ID'].'">
                         <div id="datos-card-'.$value['ID'].'">
+                            <p class="card-text">'.GetIntervalSum($value['ID']).' Minutos</p> 
                             <h3 class="card-title"  >'.$value['TITLE'].'</h3>
                             <p class="card-text">'.$value['DESCRIPTION'].'</p> 
                         </div>
                         <div id="modificar-card-'.$value['ID'].'" style="display:none;">
                         
-                        <div class="p-2" onClick="saveModifyCard(`'.$value['ID'].'`)">
-                            <i onClick class="fa-regular fa-floppy-disk"></i>
+                        <div class="p-2" >
+                            <i onClick="deleteTask(`'.$value['ID'].'`)" class="fa-solid fa-trash-can"></i>
+                        </div>
+                        <div class="p-2" >
+                            <i onClick="saveModifyCard(`'.$value['ID'].'`)" onClick class="fa-regular fa-floppy-disk"></i>
                         </div>
                         
                         <div class="card-body" data-id="'.$value['ID'].'">
-                        <label for="title-'.$value['ID'].'" class="form-label card-text">Titulo</label>
+                        
+                            <label for="title-'.$value['ID'].'" class="form-label card-text">Titulo</label>
                             <div class="card-body" id="title-card">
                                 
                                 <input type="text" class="form-control" value="'.$value['TITLE'].'" id="title-'.$value['ID'].'" aria-describedby="emailHelp">
@@ -112,21 +170,19 @@ if ( $arrCard ) {
 
 
         $intervals = GetInterval($value['ID']);
-
-        
         
         if( $intervals ){
             foreach ($intervals as $key_intervals => $value_intervals) {
 
                
                 $msg .= '
-                    <div class="card pl-2" style="width: 20% !important;">
+                    <div class="card m-5" style="width: 20% !important;">
                         <div class="card-body text-center">
                             <br><br>
                             <h4 class="card-title"> INICIO </h4> 
-                            <h5 class="card-title"> '.$value_intervals['TIME_START'].' </h5> 
+                            <h5 class="card-title"> '.substr($value_intervals['TIME_START'], 0, 5).' </h5> 
                             <h4 class="card-title"> TERMINO </h4> 
-                            <h5 class="card-title"> '.$value_intervals['TIME_END'].' </h5>
+                            <h5 class="card-title"> '.substr($value_intervals['TIME_END'], 0, 5).' </h5>
                             <br><br>
                             <h4 class="card-title"> INTERVALO </h4> 
                             <h3 class="card-title"> '.$value_intervals['DIFF'].' Min </h3>
@@ -139,7 +195,7 @@ if ( $arrCard ) {
         }
         
         $msg .= '
-                <div class="card pl-2" style="width: 30% !important;">
+                <div class="card m-5" style="width: 30% !important;">
                     <br>
                     <h5 class="px-2 text-center">Hora Inicio</h5>
                     <div class="d-flex justify-content-center">
@@ -169,27 +225,32 @@ if ( $arrCard ) {
     }
 
     $msg .= ' 
-            
             <div class="card d-flex mt-2 justify-content-center text-center" style="width: 50% !important;">
-                <div  class="card-body" data-id="'.$value['ID'].'">
-                    <h1 onClick="newTask(`TAREA`)" style="color:green;">+</h1> 
-                    <h1 onClick="newTask(`SOPORTE`)" style="color:pink;">+</h1> 
+                <div  class="card-body" >
+                    <h1 onClick="newTask(`TAREA`,'.$value['ID'].')" style="color:green;">+</h1> 
+                    <h1 onClick="newTask(`SOPORTE`,'.$value['ID'].')" style="color:pink;">+</h1> 
                 </div>  
             </div>
-            
         ';
 
     
 
-    echo $msg; 
+    
     
 } else {
 
-    echo '<h1>NA</h1>';
+    $msg .= ' 
+        <div class="card d-flex mt-2 justify-content-center text-center" style="width: 100% !important;"> 
+            <div class="card-body"> 
+                <h1 onClick="newTask(`TAREA`,`new`)" style="color:green;">+</h1> 
+                <h1 onClick="newTask(`SOPORTE`,`new`)" style="color:pink;">+</h1> 
+            </div>  
+        </div> 
+    ';
 
 }
 
-
+echo $msg; 
 
 
 ?>
