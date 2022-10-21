@@ -227,8 +227,8 @@ if ( $arrCard ) {
     $msg .= ' 
             <div class="card d-flex mt-2 justify-content-center text-center" style="width: 50% !important;">
                 <div  class="card-body" >
-                    <h1 onClick="newTask(`TAREA`,'.$value['ID'].')" style="color:green;">+</h1> 
-                    <h1 onClick="newTask(`SOPORTE`,'.$value['ID'].')" style="color:pink;">+</h1> 
+                    <h1 onClick="newTask(`TAREA`,'.$value['ID'].')" style="color:green;cursor:pointer;">+</h1> 
+                    <h1 onClick="newTask(`SOPORTE`,'.$value['ID'].')" style="color:pink;cursor:pointer;">+</h1> 
                 </div>  
             </div>
         ';
@@ -242,8 +242,8 @@ if ( $arrCard ) {
     $msg .= ' 
         <div class="card d-flex mt-2 justify-content-center text-center" style="width: 100% !important;"> 
             <div class="card-body"> 
-                <h1 onClick="newTask(`TAREA`,`new`)" style="color:green;">+</h1> 
-                <h1 onClick="newTask(`SOPORTE`,`new`)" style="color:pink;">+</h1> 
+                <h1 onClick="newTask(`TAREA`,`new`)" style="color:green;cursor:pointer;">+</h1> 
+                <h1 onClick="newTask(`SOPORTE`,`new`)" style="color:pink;cursor:pointer;">+</h1> 
             </div>  
         </div> 
     ';
