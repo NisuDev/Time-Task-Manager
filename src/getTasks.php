@@ -110,10 +110,7 @@ while( $row = $result -> fetch_assoc () ) {
     $arrCard[$row['ID']]['ID'] = $row['ID'];
 
 }
-/* 
-echo '<pre>';
-var_dump($arrCard);
-echo '</pre>'; */
+
 $msg = '';
 
 if ( $arrCard ) {

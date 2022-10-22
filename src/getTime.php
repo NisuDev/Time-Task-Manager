@@ -31,7 +31,7 @@ $msg = '';
 
 if( $dato ){
 
-    $resta = 540 - intval($dato);
+    $resta = 570 - intval($dato);
 
     $msg .= ' 
             
@@ -43,7 +43,7 @@ if( $dato ){
                     <h1 > - <h1>
                 </div>
                 <div class="card px-2" style="background-color:rgba(177,255,139,0.31222918855042014); ">
-                    <h1>540<h1>
+                    <h1>570<h1>
                 </div>
                 <div class="card px-2">
                     <h1> = <h1>
