@@ -68,7 +68,7 @@
                 type:  'post',
                 success:  function (response) {
                     if ( response == 'OK') {
-                        getDate();
+                        location.reload();
                     } else {
                        alert(response);
                     }
@@ -99,7 +99,7 @@
                 type:  'post',
                 success:  function (response) {
                     if ( response == 'OK') {
-                        getDate();
+                        location.reload();
                     } else {
                        alert(response);
                     }
@@ -128,7 +128,6 @@
                     success:  function (response) {
 
                         $('#card-display').html(response);
-                        
                         getTime()
                     }
                 });
@@ -184,7 +183,7 @@
                 type:  'post',
                 success:  function (response) {
                     if ( response == 'OK') {
-                        getDate();
+                        location.reload();
                     } else {
                        alert(response);
                     }
@@ -213,7 +212,7 @@
                             type:  'post',
                             success:  function (response) {
                                 if ( response == 'OK') {
-                                    getDate();
+                                    location.reload();
                                 } else {
                                 alert(response);
                                 }
@@ -286,7 +285,7 @@
                 type:  'post',
                 success:  function (response) {
                     if ( response == 'OK') {
-                        getDate();
+                        location.reload();
                     } else {
                     alert(response);
                     }

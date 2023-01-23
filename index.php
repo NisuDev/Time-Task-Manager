@@ -128,7 +128,6 @@
                     success:  function (response) {
 
                         $('#card-display').html(response);
-                        
                         getTime()
                     }
                 });
@@ -193,6 +192,28 @@
         
         }
         
+        function joinedTask(id){
+        
+            var params = {
+        
+                "id" : id
+        
+            };
+        
+            $.ajax({
+                data:  params,
+                url:   'src/joinTask.php',
+                type:  'post',
+                success:  function (response) {
+                    if ( response == 'OK') {
+                        getDate();
+                    } else {
+                        alert(response);
+                    }
+                }
+            });
+        
+        }
         
         function deleteTask(id){
 

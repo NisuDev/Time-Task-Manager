@@ -88,7 +88,8 @@ $selectCard = " SELECT
                     `task`.`DESCRIPTION`, 
                     `task`.`APPLICANT`, 
                     `task`.`TYPE`, 
-                    `task`.`ID`
+                    `task`.`ID`,
+                    `task`.`JOINED`
                 FROM
                     `day` INNER JOIN
                     `task` ON `task`.`DAY_ID` = `day`.`ID` LEFT JOIN
@@ -102,12 +103,13 @@ $arrCard = array();
 
 while( $row = $result -> fetch_assoc () ) {
 
+    $arrCard[$row['ID']]['JOINED'] = $row['JOINED'];
     $arrCard[$row['ID']]['ID'] = $row['ID'];
     $arrCard[$row['ID']]['TITLE'] = $row['TITLE'];
     $arrCard[$row['ID']]['DESCRIPTION'] = $row['DESCRIPTION'];
     $arrCard[$row['ID']]['APPLICANT'] = $row['APPLICANT'];
     $arrCard[$row['ID']]['TYPE'] = $row['TYPE'];
-    $arrCard[$row['ID']]['ID'] = $row['ID'];
+   
 
 }
 
@@ -123,9 +125,25 @@ if ( $arrCard ) {
                 <div class="card my-2" style="';
 
                 if($value['TYPE'] == 'SOPORTE'){
-                    $msg .= ' background-color:rgba(241,139,255,0.31222918855042014); ';
+                    //$msg .= ' background-color:rgba(241,139,255,0.31222918855042014); ';
+                    if($value['JOINED'] == '1'){
+                        $msg .= 'background: linear-gradient(0deg, rgba(236,97,255,1) 10%, rgba(241,139,255,0.47) 11%, rgba(241,139,255,1) 100%);';
+                    }else{
+                        $msg .= ' background-color:rgba(241,139,255,0.31222918855042014); ';
+                    }
                 }else{
                     $msg .= ' background-color:rgba(177,255,139,0.31222918855042014); ';
+                    if($value['JOINED'] == '1'){
+                        $msg .= 'background: linear-gradient(0deg, rgba(70,255,0,1) 10%, rgba(151,255,101,0.47) 11%, rgba(177,255,139,1) 100%); ';
+                    }else{
+                        $msg .= ' background-color:rgba(177,255,139,0.31222918855042014);  ';
+                    }
+                }
+
+                if($value['JOINED'] == '1'){
+                    $checked = 'checked';
+                }else{
+                    $checked = '';
                 }
                 
                 $msg .= '  width: 50% !important;">
@@ -133,6 +151,7 @@ if ( $arrCard ) {
                     <div class="p-2" onClick="modifyCard(`'.$value['ID'].'`)">
                         <i class="fa-solid fa-pencil"></i>
                     </div>
+                    
                     <div class="card-body" data-id="'.$value['ID'].'">
                         <div id="datos-card-'.$value['ID'].'">
                             <p class="card-text">'.GetIntervalSum($value['ID']).' Minutos</p> 
@@ -147,12 +166,9 @@ if ( $arrCard ) {
                         <div class="p-2" >
                             <i onClick="saveModifyCard(`'.$value['ID'].'`)" onClick class="fa-regular fa-floppy-disk"></i>
                         </div>
-                        
                         <div class="card-body" data-id="'.$value['ID'].'">
-                        
                             <label for="title-'.$value['ID'].'" class="form-label card-text">Titulo</label>
                             <div class="card-body" id="title-card">
-                                
                                 <input type="text" class="form-control" value="'.$value['TITLE'].'" id="title-'.$value['ID'].'" aria-describedby="emailHelp">
                             </div>
                             <label class="form-label card-text">Descripcion</label>
@@ -161,6 +177,12 @@ if ( $arrCard ) {
                             </div>
                         </div>
                         </div>
+                    </div>
+                    <div class="ml-5 mb-5 form-check">
+                        <input class="form-check-input" onClick="joinedTask(`'.$value['ID'].'`)" type="checkbox"    id="flexCheckChecked" '.$checked.'>
+                        <label class="form-check-label" for="flexCheckChecked">
+                            Ingresado
+                        </label>
                     </div>
                 </div>
         ';
