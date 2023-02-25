@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 $mysql = new mysqli('127.0.0.1', 'root', '', 'control_tiempo');
 
 if ( $_POST['tipoIngreso'] == 'new' ) {
@@ -20,7 +22,7 @@ if ( $_POST['tipoIngreso'] == 'new' ) {
 
     if ( $mysql -> query ( $insertDay ) === TRUE ) {
     
-        $insert = "INSERT INTO task (DAY_ID,TITLE,DESCRIPTION,APPLICANT,TYPE) VALUES (".$arrDay['maximo'].",'NUEVA TAREA','DESC','APLICANT TEST','".$_POST['tipo']."')";
+        $insert = "INSERT INTO task (USER_ID,DAY_ID,TITLE,DESCRIPTION,APPLICANT,TYPE) VALUES (".$_SESSION['ID_USER'].",".$arrDay['maximo'].",'NUEVA TAREA','DESC','APLICANT TEST','".$_POST['tipo']."') ";
 
         if ( $mysql -> query ( $insert ) === TRUE ) {
 
@@ -52,7 +54,7 @@ if ( $_POST['tipoIngreso'] == 'new' ) {
     
     }
 
-    $insert = "INSERT INTO task (DAY_ID,TITLE,DESCRIPTION,APPLICANT,TYPE) VALUES (".$arrDay['ID'].",'TITLE DESK DAY','DESC DAY','APPLICANT TEST','".$_POST['tipo']."')";
+    $insert = "INSERT INTO task (USER_ID,DAY_ID,TITLE,DESCRIPTION,APPLICANT,TYPE) VALUES (".$_SESSION['ID_USER'].",".$arrDay['ID'].",'TITLE DESK DAY','DESC DAY','APPLICANT TEST','".$_POST['tipo']."')";
 
     if ( $mysql -> query ( $insert ) === TRUE ) {
 

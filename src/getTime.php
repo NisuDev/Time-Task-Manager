@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 $mysql = new mysqli('127.0.0.1', 'root', '', 'control_tiempo');
 
 $selectInterval = " SELECT 
@@ -15,7 +17,8 @@ $selectInterval = " SELECT
                         `task` ON `task`.`DAY_ID` = `day`.`ID` LEFT JOIN
                         `intervals` ON `task`.`ID` = `intervals`.`TASK_ID`
                     WHERE
-                        `day`.`DAY` = '".date('Y-m-d', strtotime($_POST['date']))."' ";
+                        `day`.`DAY` = '".date('Y-m-d', strtotime($_POST['date']))."' 
+                        AND `task`.`USER_ID` = ".$_SESSION['ID_USER']." ; ";
 
 $result = $mysql -> query( $selectInterval );
 

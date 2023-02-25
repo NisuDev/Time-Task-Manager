@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 $mysql = new mysqli('127.0.0.1', 'root', '', 'control_tiempo');
 
 function GetIntervalSum($idTask){
@@ -72,7 +74,7 @@ function GetInterval($idTask){
 
     }
 
-    if( ! $arrInterval ){
+    if ( ! $arrInterval ) {
 
         return NULL;
     
@@ -95,7 +97,7 @@ $selectCard = " SELECT
                     `task` ON `task`.`DAY_ID` = `day`.`ID` LEFT JOIN
                     `intervals` ON `task`.`ID` = `intervals`.`TASK_ID`
                 WHERE
-                    `day`.`DAY` = '".$_POST['date']."' ";
+                    `day`.`DAY` = '".$_POST['date']."' AND USER_ID = ".$_SESSION['ID_USER']."";
 
 $result = $mysql -> query( $selectCard );
 
