@@ -6,6 +6,7 @@ $mysql = new mysqli('127.0.0.1', 'root', '', 'control_tiempo');
 
 $user = $_POST['user'];
 $password = $_POST['password'];
+
 $arrUsuario = array();
 $arrLogin = array();
 

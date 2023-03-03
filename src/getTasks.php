@@ -4,6 +4,38 @@ session_start();
 
 $mysql = new mysqli('127.0.0.1', 'root', '', 'control_tiempo');
 
+function GetMaxInterval(){
+
+    $mysql = new mysqli('127.0.0.1', 'root', '', 'control_tiempo');
+
+    $selectInterval = " SELECT
+                            MAX(`intervals`.`ID`) as `MAX_INTERVAL`
+                        FROM
+                            `task` INNER JOIN
+                            `user` ON `user`.`ID` = `task`.`USER_ID` INNER JOIN
+                            `intervals` ON `intervals`.`TASK_ID` = `task`.`ID` 
+                        WHERE 
+                             `task`.`USER_ID` = ".$_SESSION['ID_USER']." ; ";
+
+    $result = $mysql -> query( $selectInterval );
+
+    $arrInterval = array();
+
+    while( $row = $result -> fetch_assoc () ) {
+
+        $dato = $row['MAX_INTERVAL'];
+
+    }
+
+    if( ! $dato ){
+
+        return NULL;
+    
+    }
+
+    return $dato;
+}
+
 function GetIntervalSum($idTask){
 
     $mysql = new mysqli('127.0.0.1', 'root', '', 'control_tiempo');
@@ -195,9 +227,14 @@ if ( $arrCard ) {
         if( $intervals ){
             foreach ($intervals as $key_intervals => $value_intervals) {
 
-               
+                if(GetMaxInterval() == $value_intervals['ID']){
+                    $bg_interval = 'background-color:rgba(177,255,139,0.31222918855042014);';  
+                }else{
+                    $bg_interval = "";
+                }
+
                 $msg .= '
-                    <div class="card m-5" style="width: 20% !important;">
+                    <div class="card m-5" style="width: 20% !important; '.$bg_interval.'">
                         <div class="card-body text-center">
                             <br><br>
                             <h4 class="card-title"> INICIO </h4> 
