@@ -159,7 +159,7 @@ if ( $arrCard ) {
                 <div class="card my-2" style="';
 
                 if($value['TYPE'] == 'SOPORTE'){
-                    //$msg .= ' background-color:rgba(241,139,255,0.31222918855042014); ';
+
                     if($value['JOINED'] == '1'){
                         $msg .= 'background: linear-gradient(0deg, rgba(236,97,255,1) 10%, rgba(241,139,255,0.47) 11%, rgba(241,139,255,1) 100%);';
                     }else{
