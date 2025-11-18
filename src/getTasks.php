@@ -183,7 +183,7 @@ if ( $arrCard ) {
                 $msg .= '  width: 50% !important;">
 
                     <div class="p-2" onClick="modifyCard(`'.$value['ID'].'`)">
-                        <i class="fa-solid fa-pencil"></i>
+                        <i>✏️</i>
                     </div>
                     
                     <div class="card-body" data-id="'.$value['ID'].'">
@@ -195,10 +195,10 @@ if ( $arrCard ) {
                         <div id="modificar-card-'.$value['ID'].'" style="display:none;">
                         
                         <div class="p-2" >
-                            <i onClick="deleteTask(`'.$value['ID'].'`)" class="fa-solid fa-trash-can"></i>
+                            <i onClick="deleteTask(`'.$value['ID'].'`)" >🗑️</i>
                         </div>
                         <div class="p-2" >
-                            <i onClick="saveModifyCard(`'.$value['ID'].'`)" onClick class="fa-regular fa-floppy-disk"></i>
+                            <i onClick="saveModifyCard(`'.$value['ID'].'`)" >💾</i>
                         </div>
                         <div class="card-body" data-id="'.$value['ID'].'">
                             <label for="title-'.$value['ID'].'" class="form-label card-text">Titulo</label>

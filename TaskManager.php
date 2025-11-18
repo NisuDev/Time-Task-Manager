@@ -293,8 +293,6 @@
                 return 0;
             }
 
-            ////VALIDAR MINUTOS
-
             if ( parseInt( $( '#mstart-'+id ).val() ) < 0 || parseInt( $( '#mend-'+id ).val() ) < 0 ) {
                 alert('Debe ingresar minimo 0 minutos');
                 return 0;
